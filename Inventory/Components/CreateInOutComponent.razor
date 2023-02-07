@@ -1,0 +1,25 @@
+﻿@using Entities
+@using Business 
+
+<div class="form-group">
+    <select class="form-control">
+        <option value="">Seleccione una bodeba...</option>
+        @foreach(var warehouse in warehouses)
+            {
+                <option value="@warehouse">@warehouse.WarehouseName</option>
+            }
+    </select>
+</div>
+
+@code {
+    InputOutputEntity oInOut = new InputOutputEntity();
+
+    List<WarehouseEntity> warehouses = new List<WarehouseEntity>();
+    List<StorageEntity> storages = new List<StorageEntity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        warehouses = B_Warehouse.WarehouseList();
+
+    }
+}

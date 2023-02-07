@@ -1,0 +1,47 @@
+﻿@using Entities
+@using Business
+
+@inject NavigationManager NavManager // Esta es una iyeccion de dependencias - Es un llamado a clases. Video 28
+
+<EditForm Model="oProduct">
+    <div class="form-group">
+        <label>Producto:</label>
+        <InputText class="form-control" @bind-Value="oProduct.ProductName" />
+    </div>
+    <div class="form-group">
+        <label>Descripción:</label>
+        <InputTextArea class="form-control" @bind-Value="oProduct.ProductDescription" />
+    </div>
+    <div class="form-group">
+        <label>Categoría</label>
+        <InputSelect class="form-control" @bind-Value="oProduct.CategoryId">
+            @foreach (var category in categories)
+            {
+                <option value="@category.CategoryId">@category.CategoryName</option>
+            }
+        </InputSelect>
+    </div>
+    <input type="button" value="Actualizar producto" @onclick="UpdateProduct" />
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public string idProduct { get; set; }
+
+    ProductEntity oProduct = new ProductEntity();
+    List<CategoryEntity> categories = new List<CategoryEntity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = B_Category.CategoryList();
+        oProduct = B_Product.ProductById(idProduct);
+    }
+
+    private void UpdateProduct()
+    {
+        B_Product.UpdateProduct(oProduct);
+        NavManager.NavigateTo("product/list");
+
+    }
+}
